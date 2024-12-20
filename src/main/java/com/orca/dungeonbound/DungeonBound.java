@@ -2,6 +2,7 @@ package com.orca.dungeonbound;
 
 import com.mojang.logging.LogUtils;
 import com.orca.dungeonbound.common.entity.DBEntities;
+import com.orca.dungeonbound.common.item.DBItems;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -30,35 +31,19 @@ public class DungeonBound
         modEventBus.addListener(this::commonSetup);
 
         DBEntities.register(modEventBus);
+        DBItems.register(modEventBus);
+        DBCreativeTab.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(this::addCreative);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
+    private void commonSetup(final FMLCommonSetupEvent event) {}
 
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {}
 
-    }
+//    @SubscribeEvent
+//    public void onServerStarting(ServerStartingEvent event) {}
 
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
-
-    }
-
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event)
-    {
-
-    }
-@Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
-
-        }
-    }
 }

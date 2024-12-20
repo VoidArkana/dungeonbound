@@ -13,7 +13,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class KoboldEntity extends TamableAnimal {
 
-    protected KoboldEntity(EntityType<? extends TamableAnimal> pEntityType, Level pLevel) {
+    public final AnimationState idleAnimationState = new AnimationState();
+    private int idleAnimationTimeout = 0;
+
+    public KoboldEntity(EntityType<? extends TamableAnimal> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
@@ -36,6 +39,37 @@ public class KoboldEntity extends TamableAnimal {
     @Override
     public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
         return null;
+    }
+
+
+    private void setupAnimationStates() {
+        if (this.idleAnimationTimeout <= 0) {
+            this.idleAnimationTimeout = this.random.nextInt(40) + 80;
+            this.idleAnimationState.start(this.tickCount);
+        } else {
+            --this.idleAnimationTimeout;
+        }
+    }
+
+    @Override
+    protected void updateWalkAnimation(float pPartialTick) {
+        float f;
+        if(this.getPose() == Pose.STANDING) {
+            f = Math.min(pPartialTick * 6F, 1f);
+        } else {
+            f = 0f;
+        }
+
+        this.walkAnimation.update(f, 0.2f);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.level().isClientSide()) {
+            this.setupAnimationStates();
+        }
     }
 
     public void hire(Player pPlayer) {

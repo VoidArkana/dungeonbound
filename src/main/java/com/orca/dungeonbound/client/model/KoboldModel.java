@@ -4,7 +4,9 @@ package com.orca.dungeonbound.client.model;// Made with Blockbench 4.11.2
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.orca.dungeonbound.client.animations.KoboldAnimations;
 import com.orca.dungeonbound.common.entity.custom.KoboldEntity;
+import net.minecraft.client.animation.definitions.CamelAnimation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -15,8 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class KoboldModel<T extends KoboldEntity> extends HierarchicalModel<T> {
-	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("modid", "dungeonkobold"), "main");
+
 	private final ModelPart root;
 	private final ModelPart barrel;
 	private final ModelPart lid;
@@ -149,23 +150,9 @@ public class KoboldModel<T extends KoboldEntity> extends HierarchicalModel<T> {
 		this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
 		this.barrel.visible = false;
 
-		float animQueryTime = ageInTicks/2;
+		this.animateWalk(KoboldAnimations.WALK, limbSwing, limbSwingAmount, 2.0F, 2.5F);
 
-		if (entity.walkAnimation.isMoving()){
-			this.RightLeg.xRot = (float) ((Math.cos((limbSwing-0.2)*720)*40))*limbSwingAmount;
-			this.RightLeg.yRot = 40*limbSwingAmount;
-			this.LeftLeg.xRot = (float) ((Math.cos((limbSwing-0.3)*720)*40))*limbSwingAmount;
-			this.RightArm.zRot = (float) ((Math.cos((limbSwing-0.3)*720)*20+30))*limbSwingAmount;
-			this.RightArm.yRot = 50*limbSwingAmount;
-			this.LeftArm.zRot = (float) ((Math.cos((limbSwing-0.3)*720)*-20+30))*limbSwingAmount;
-			this.LeftArm.yRot = -50*limbSwingAmount;
-			this.tail.xRot = (float) ((Math.cos((limbSwing-0.4)*720)*-30))*limbSwingAmount;
-			this.tail.yRot = 45*limbSwingAmount;
-			this.earRight.yRot = (float) ((Math.cos((limbSwing-0.4)*720)*10+45)*limbSwingAmount);
-			this.earRight.zRot = (float) (Math.cos((limbSwing-0.4)*720)*-10)*limbSwingAmount;
-        }else {
-
-		}
+		this.animate(entity.idleAnimationState, KoboldAnimations.IDLE, ageInTicks, 1.0F);
 
 	}
 
