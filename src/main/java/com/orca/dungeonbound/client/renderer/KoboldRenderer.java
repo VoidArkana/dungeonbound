@@ -4,11 +4,10 @@ import com.orca.dungeonbound.DungeonBound;
 import com.orca.dungeonbound.client.model.KoboldModel;
 import com.orca.dungeonbound.client.model.ModelLayers;
 import com.orca.dungeonbound.common.entity.custom.KoboldEntity;
-import net.minecraft.client.model.SnifferModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.animal.sniffer.Sniffer;
 
 public class KoboldRenderer extends MobRenderer<KoboldEntity, KoboldModel<KoboldEntity>> {
 
@@ -16,6 +15,7 @@ public class KoboldRenderer extends MobRenderer<KoboldEntity, KoboldModel<Kobold
 
     public KoboldRenderer(EntityRendererProvider.Context pContext) {
         super(pContext, new KoboldModel<>(pContext.bakeLayer(ModelLayers.KOBOLD_LAYER)), 0.5f);
+        this.addLayer(new ItemInHandLayer<>(this, pContext.getItemInHandRenderer()));
     }
 
     @Override

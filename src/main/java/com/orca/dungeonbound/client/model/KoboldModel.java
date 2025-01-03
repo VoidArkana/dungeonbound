@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.orca.dungeonbound.client.animations.KoboldAnimations;
 import com.orca.dungeonbound.common.entity.custom.KoboldEntity;
 import net.minecraft.client.animation.definitions.CamelAnimation;
+import net.minecraft.client.model.ArmedModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -15,22 +16,12 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
+import org.joml.Quaternionf;
 
-public class KoboldModel<T extends KoboldEntity> extends HierarchicalModel<T> {
+public class KoboldModel<T extends KoboldEntity> extends HierarchicalModel<T> implements ArmedModel {
 
 	private final ModelPart root;
-	private final ModelPart barrel;
-	private final ModelPart lid;
-	private final ModelPart kobold2;
-	private final ModelPart body2;
-	private final ModelPart head2;
-	private final ModelPart earLeft2;
-	private final ModelPart earRight2;
-	private final ModelPart tail2;
-	private final ModelPart LeftArm2;
-	private final ModelPart RightArm2;
-	private final ModelPart LeftLeg2;
-	private final ModelPart RightLeg2;
 	private final ModelPart kobold;
 	private final ModelPart body;
 	private final ModelPart head;
@@ -44,26 +35,14 @@ public class KoboldModel<T extends KoboldEntity> extends HierarchicalModel<T> {
 
 	public KoboldModel(ModelPart root) {
 		this.root = root.getChild("root");
-		this.barrel = this.root.getChild("barrel");
-		this.lid = this.barrel.getChild("lid");
-		this.kobold2 = this.barrel.getChild("kobold2");
-		this.body2 = this.kobold2.getChild("body2");
-		this.head2 = this.body2.getChild("head2");
-		this.earLeft2 = this.head2.getChild("earLeft2");
-		this.earRight2 = this.head2.getChild("earRight2");
-		this.tail2 = this.body2.getChild("tail2");
-		this.LeftArm2 = this.body2.getChild("LeftArm2");
-		this.RightArm2 = this.body2.getChild("RightArm2");
-		this.LeftLeg2 = this.kobold2.getChild("LeftLeg2");
-		this.RightLeg2 = this.kobold2.getChild("RightLeg2");
 		this.kobold = this.root.getChild("kobold");
 		this.body = this.kobold.getChild("body");
 		this.head = this.body.getChild("head");
 		this.earLeft = this.head.getChild("earLeft");
 		this.earRight = this.head.getChild("earRight");
 		this.tail = this.body.getChild("tail");
-		this.LeftArm = this.body.getChild("LeftArm");
-		this.RightArm = this.body.getChild("RightArm");
+		this.LeftArm = body.getChild("LeftArm");
+		this.RightArm = body.getChild("RightArm");
 		this.LeftLeg = this.kobold.getChild("LeftLeg");
 		this.RightLeg = this.kobold.getChild("RightLeg");
 	}
@@ -73,41 +52,6 @@ public class KoboldModel<T extends KoboldEntity> extends HierarchicalModel<T> {
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
 		PartDefinition root = partdefinition.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
-
-		PartDefinition barrel = root.addOrReplaceChild("barrel", CubeListBuilder.create().texOffs(0, 0).addBox(-8.0F, -15.0F, -8.0F, 16.0F, 15.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-		PartDefinition lid = barrel.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(0, 31).addBox(-8.0F, -1.1F, -8.0F, 16.0F, 1.0F, 16.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -19.0F, 0.0F));
-
-		PartDefinition kobold2 = barrel.addOrReplaceChild("kobold2", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-		PartDefinition body2 = kobold2.addOrReplaceChild("body2", CubeListBuilder.create().texOffs(56, 48).addBox(-2.5F, -4.0F, -2.0F, 5.0F, 8.0F, 4.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 62).addBox(-1.5F, -9.0F, -1.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -9.0F, 0.0F));
-
-		PartDefinition head2 = body2.addOrReplaceChild("head2", CubeListBuilder.create().texOffs(28, 48).addBox(-2.5F, -1.5F, -8.0F, 5.0F, 3.0F, 9.0F, new CubeDeformation(0.0F))
-		.texOffs(29, 64).addBox(1.5F, -2.5F, 0.0F, 1.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
-		.texOffs(29, 64).addBox(-2.5F, -2.5F, 0.0F, 1.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
-		.texOffs(28, 65).addBox(-2.5F, -2.5F, 3.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(28, 65).addBox(1.5F, -2.5F, 3.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 70).addBox(-2.5F, 1.5F, -8.0F, 5.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -8.5F, 0.0F));
-
-		PartDefinition earLeft2 = head2.addOrReplaceChild("earLeft2", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -0.5F, 0.0F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, 0.0F, 0.0F));
-
-		PartDefinition earRight2 = head2.addOrReplaceChild("earRight2", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-4.0F, -0.5F, 0.0F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.5F, 0.0F, 0.0F));
-
-		PartDefinition tail2 = body2.addOrReplaceChild("tail2", CubeListBuilder.create().texOffs(0, 48).addBox(-1.0F, -1.0F, -2.0F, 2.0F, 2.0F, 12.0F, new CubeDeformation(0.0F))
-		.texOffs(0, -3).addBox(0.0F, -2.0F, 3.0F, 0.0F, 1.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 3.0F, 2.0F));
-
-		PartDefinition LeftArm2 = body2.addOrReplaceChild("LeftArm2", CubeListBuilder.create().texOffs(28, 60).addBox(0.0F, 0.0F, -1.5F, 6.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, -4.0F, 0.5F));
-
-		PartDefinition RightArm2 = body2.addOrReplaceChild("RightArm2", CubeListBuilder.create().texOffs(28, 60).mirror().addBox(-6.0F, 0.0F, -1.5F, 6.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.5F, -4.0F, 0.5F));
-
-		PartDefinition LeftLeg2 = kobold2.addOrReplaceChild("LeftLeg2", CubeListBuilder.create().texOffs(38, 63).addBox(-0.9F, -1.0F, -1.1F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 3).addBox(-0.9F, 3.0F, 0.9F, 1.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(-2, 6).addBox(-1.9F, 5.95F, -1.1F, 3.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, -6.0F, 1.0F));
-
-		PartDefinition RightLeg2 = kobold2.addOrReplaceChild("RightLeg2", CubeListBuilder.create().texOffs(38, 63).mirror().addBox(-1.1F, -1.0F, -1.1F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false)
-		.texOffs(0, 3).addBox(-0.1F, 3.0F, 0.9F, 1.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(-2, 6).addBox(-0.9F, 5.95F, -1.1F, 3.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, -6.0F, 1.0F));
 
 		PartDefinition kobold = root.addOrReplaceChild("kobold", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -121,22 +65,22 @@ public class KoboldModel<T extends KoboldEntity> extends HierarchicalModel<T> {
 		.texOffs(28, 65).addBox(1.5F, -2.5F, 3.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
 		.texOffs(0, 70).addBox(-2.5F, 1.5F, -8.0F, 5.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -8.5F, 0.0F));
 
-		PartDefinition earLeft = head.addOrReplaceChild("earLeft", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -0.5F, 0.0F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, 0.0F, 0.0F));
+		head.addOrReplaceChild("earLeft", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -0.5F, 0.0F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, 0.0F, 0.0F));
 
-		PartDefinition earRight = head.addOrReplaceChild("earRight", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-4.0F, -0.5F, 0.0F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.5F, 0.0F, 0.0F));
+		head.addOrReplaceChild("earRight", CubeListBuilder.create().texOffs(0, 0).mirror().addBox(-4.0F, -0.5F, 0.0F, 4.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.5F, 0.0F, 0.0F));
 
-		PartDefinition tail = body.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 48).addBox(-1.0F, -1.0F, -2.0F, 2.0F, 2.0F, 12.0F, new CubeDeformation(0.0F))
+		body.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 48).addBox(-1.0F, -1.0F, -2.0F, 2.0F, 2.0F, 12.0F, new CubeDeformation(0.0F))
 		.texOffs(0, -3).addBox(0.0F, -2.0F, 3.0F, 0.0F, 1.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 3.0F, 2.0F));
 
-		PartDefinition LeftArm = body.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(28, 60).addBox(0.0F, 0.0F, -1.5F, 6.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, -4.0F, 0.5F));
+		body.addOrReplaceChild("LeftArm", CubeListBuilder.create().texOffs(28, 60).addBox(0.0F, 0.0F, -1.5F, 6.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(2.5F, -4.0F, 0.5F));
 
-		PartDefinition RightArm = body.addOrReplaceChild("RightArm", CubeListBuilder.create().texOffs(28, 60).mirror().addBox(-6.0F, 0.0F, -1.5F, 6.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.5F, -4.0F, 0.5F));
+		body.addOrReplaceChild("RightArm", CubeListBuilder.create().texOffs(28, 60).mirror().addBox(-6.0F, 0.0F, -1.5F, 6.0F, 0.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.5F, -4.0F, 0.5F));
 
-		PartDefinition LeftLeg = kobold.addOrReplaceChild("LeftLeg", CubeListBuilder.create().texOffs(38, 63).addBox(-0.9F, -1.0F, -1.1F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F))
+		kobold.addOrReplaceChild("LeftLeg", CubeListBuilder.create().texOffs(38, 63).addBox(-0.9F, -1.0F, -1.1F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F))
 		.texOffs(0, 3).addBox(-0.9F, 3.0F, 0.9F, 1.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
 		.texOffs(-2, 6).mirror().addBox(-1.9F, 5.95F, -1.1F, 3.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(2.0F, -6.0F, 1.0F));
 
-		PartDefinition RightLeg = kobold.addOrReplaceChild("RightLeg", CubeListBuilder.create().texOffs(38, 63).mirror().addBox(-1.1F, -1.0F, -1.1F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false)
+		kobold.addOrReplaceChild("RightLeg", CubeListBuilder.create().texOffs(38, 63).mirror().addBox(-1.1F, -1.0F, -1.1F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(0, 3).addBox(-0.1F, 3.0F, 0.9F, 1.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
 		.texOffs(-2, 6).addBox(-0.9F, 5.95F, -1.1F, 3.0F, 0.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, -6.0F, 1.0F));
 
@@ -148,7 +92,6 @@ public class KoboldModel<T extends KoboldEntity> extends HierarchicalModel<T> {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		this.head.xRot = headPitch * ((float)Math.PI / 180F);
 		this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
-		this.barrel.visible = false;
 
 		this.animateWalk(KoboldAnimations.WALK, limbSwing, limbSwingAmount, 2.0F, 2.5F);
 
@@ -164,5 +107,32 @@ public class KoboldModel<T extends KoboldEntity> extends HierarchicalModel<T> {
 	@Override
 	public ModelPart root() {
 		return root;
+	}
+
+	@Override
+	public void translateToHand(HumanoidArm pSide, PoseStack pPoseStack) {
+		//this.getArm(pSide).translateAndRotate(pPoseStack);
+
+		boolean flag = pSide == HumanoidArm.RIGHT;
+		ModelPart modelpart = flag ? this.RightArm : this.LeftArm;
+		this.root.translateAndRotate(pPoseStack);
+		this.kobold.translateAndRotate(pPoseStack);
+		this.body.translateAndRotate(pPoseStack);
+		modelpart.translateAndRotate(pPoseStack);
+		pPoseStack.scale(0.55F, 0.55F, 0.55F);
+		this.offsetStackPosition(pPoseStack, flag);
+	}
+
+	private ModelPart getArm(HumanoidArm pArm) {
+		return pArm == HumanoidArm.LEFT ? this.LeftArm : this.RightArm;
+	}
+
+	private void offsetStackPosition(PoseStack pPoseStack, boolean pRightSide) {
+		if (pRightSide) {
+			pPoseStack.translate(-0.5D, -0.5D, 0.078125D);
+		} else {
+			pPoseStack.translate(0.5D, -0.5D, 0.078125D);
+		}
+
 	}
 }
